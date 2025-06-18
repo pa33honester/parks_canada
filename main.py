@@ -8,9 +8,21 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import threading
+import yagmail
+import base64
+from email.mime.text import MIMEText
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+
+load_dotenv()
 
 driver = None # selenium chrome web driver
 wait = None # web driver wait
+
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def init():
     global driver, wait
@@ -133,6 +145,16 @@ def close_site_calendar():
     except Exception as e:
         print(f"Could not close calendar modal: {e}")
 
+def send_yagmail(data):
+    try:
+        yag = yagmail.SMTP(os.getenv('YAGMAIL_USER'), os.getenv('YAGMAIL_PASS'))
+        subject = "Available Dates Found"
+        contents = f"Available dates found:\n{data}"
+        yag.send(to=os.getenv('YAGMAIL_TO'), subject=subject, contents=contents)
+        print("Email sent successfully.")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+
 def main():
     select_option("equipment-field", "Trailer or Motorhome over 35ft")
     click_search_button("actionSearch")
@@ -143,7 +165,17 @@ def main():
         get_available_dates()
         close_site_calendar()
 
+def set_interval(func, sec):
+    def wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, wrapper)
+    t.start()
+    return t
+
 if __name__ == '__main__':
-    init()
-    main()
+    # init()
+    # set_interval(main, os.getenv('TIMEOUT'))
+    # send_yagmail("Test email content")
+    # send_gmail()
     input('Press Enter to close the browser...')
