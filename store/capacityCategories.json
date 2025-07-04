@@ -1,0 +1,265 @@
+[
+  {
+    "versionId": -2147411970,
+    "versionDate": "2023-02-08T14:24:00.047Z",
+    "isDisabled": false,
+    "capacityCategoryId": -32767,
+    "name": "Party Size",
+    "capacityCategoryType": 1,
+    "localizedValues": [
+      {
+        "cultureName": "en-CA",
+        "displayName": "Party Size",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      },
+      {
+        "cultureName": "fr-CA",
+        "displayName": "Taille du groupe",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      }
+    ],
+    "subCapacityCategories": [
+      {
+        "subCapacityCategoryId": -32768,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Adult (18-64)",
+            "description": "Party members aged 18 to 64."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Adulte (18-64)",
+            "description": "Membres du groupe âgé de 18 ans à 64 ans."
+          }
+        ],
+        "isActive": true,
+        "isAdult": true
+      },
+      {
+        "subCapacityCategoryId": -32767,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Senior (65+)",
+            "description": "Party members aged 65 and older."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Aîné (65+)",
+            "description": "Membres du groupe âgé de 65 ans et plus."
+          }
+        ],
+        "isActive": true,
+        "isAdult": true
+      },
+      {
+        "subCapacityCategoryId": -32766,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Youth (6-17)",
+            "description": "Party members aged 6 to 17."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Jeune (6-17)",
+            "description": "Membres du groupe âgé de 6 ans à 17 ans."
+          }
+        ],
+        "isActive": true,
+        "isAdult": false
+      },
+      {
+        "subCapacityCategoryId": -32765,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Child (0-5)",
+            "description": "Party members aged 5 and under."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Enfant (0-5)",
+            "description": "Membres du groupe âgé de 5 ans et moins."
+          }
+        ],
+        "isActive": true,
+        "isAdult": false
+      }
+    ]
+  },
+  {
+    "versionId": -2147411969,
+    "versionDate": "2023-02-08T14:24:00.047Z",
+    "isDisabled": false,
+    "capacityCategoryId": -32765,
+    "name": "WCT Party Size",
+    "capacityCategoryType": 1,
+    "localizedValues": [
+      {
+        "cultureName": "en-CA",
+        "displayName": "Party Size",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      },
+      {
+        "cultureName": "fr-CA",
+        "displayName": "Taille du groupe",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      }
+    ],
+    "subCapacityCategories": [
+      {
+        "subCapacityCategoryId": -32764,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Adult (18-44)",
+            "description": "Party members aged 18 to 44."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Adulte (18-44)",
+            "description": "Membres du groupe âgé de 18 ans à 44 ans."
+          }
+        ],
+        "isActive": true,
+        "isAdult": true
+      },
+      {
+        "subCapacityCategoryId": -32763,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Adult (45-64)",
+            "description": "Party members aged 45 to 64."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Adulte (45-64)",
+            "description": "Membres du groupe âgé de 45 ans à 64 ans."
+          }
+        ],
+        "isActive": true,
+        "isAdult": true
+      },
+      {
+        "subCapacityCategoryId": -32762,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Senior (65+)",
+            "description": "Party members aged 65 and older."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Ainé (65+)",
+            "description": "Membres du groupe âgé de 65 ans et plus."
+          }
+        ],
+        "isActive": true,
+        "isAdult": true
+      },
+      {
+        "subCapacityCategoryId": -32761,
+        "localizedValues": [
+          {
+            "cultureName": "en-CA",
+            "name": "Youth (6-17)",
+            "description": "Party members aged 6 to 17."
+          },
+          {
+            "cultureName": "fr-CA",
+            "name": "Jeune (6-17)",
+            "description": "Membres du groupe âgé de 6 ans à 17 ans."
+          }
+        ],
+        "isActive": true,
+        "isAdult": false
+      }
+    ]
+  },
+  {
+    "versionId": -2147411968,
+    "versionDate": "2023-02-08T14:24:00.047Z",
+    "isDisabled": false,
+    "capacityCategoryId": -32768,
+    "name": "Total Party Size",
+    "capacityCategoryType": 1,
+    "localizedValues": [
+      {
+        "cultureName": "en-CA",
+        "displayName": "Party Size",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      },
+      {
+        "cultureName": "fr-CA",
+        "displayName": "Taille du groupe",
+        "description": "",
+        "capacityUnitLabel": "",
+        "capacityUnitLabelPlural": ""
+      }
+    ],
+    "subCapacityCategories": []
+  },
+  {
+    "versionId": -2147340163,
+    "versionDate": "2024-08-01T03:02:00.003Z",
+    "isDisabled": false,
+    "capacityCategoryId": -32766,
+    "name": "Tent Pads",
+    "capacityCategoryType": 0,
+    "localizedValues": [
+      {
+        "cultureName": "en-CA",
+        "displayName": "Tent Pads",
+        "description": "",
+        "capacityUnitLabel": "Tent Pad",
+        "capacityUnitLabelPlural": "Tent Pads"
+      },
+      {
+        "cultureName": "fr-CA",
+        "displayName": "Tabliers de tente",
+        "description": "",
+        "capacityUnitLabel": "Tablier de tente",
+        "capacityUnitLabelPlural": "Tabliers de tente"
+      }
+    ],
+    "subCapacityCategories": []
+  },
+  {
+    "versionId": -2147331101,
+    "versionDate": "2025-05-17T03:03:59.993Z",
+    "isDisabled": false,
+    "capacityCategoryId": -32764,
+    "name": "Equipment",
+    "capacityCategoryType": 0,
+    "localizedValues": [
+      {
+        "cultureName": "en-CA",
+        "displayName": "Equipment",
+        "description": "",
+        "capacityUnitLabel": "Equipment",
+        "capacityUnitLabelPlural": "Equipment"
+      },
+      {
+        "cultureName": "fr-CA",
+        "displayName": "Équipement",
+        "description": "",
+        "capacityUnitLabel": "Équipement",
+        "capacityUnitLabelPlural": "Équipement"
+      }
+    ],
+    "subCapacityCategories": []
+  }
+]
