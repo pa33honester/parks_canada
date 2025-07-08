@@ -1,0 +1,29 @@
+{
+    "url": "https://reservation.pc.gc.ca",
+    "rootMapId" : "-2147483575",
+    "westernMapId" : "-2147483574",
+    "parks" : {
+        "-2147483647": "Banff - Lake Louise",
+        "-2147483630": "Banff",
+        "-2147483589": "Banff, Kootenay and Yoho Backcountry",
+        "-2147483559": "Elk Island",
+        "-2147483536": "Fort Langley",
+        "-2147483534": "Fort Rodd Hill",
+        "-2147483497": "Glacier",
+        "-2147483478": "Gulf Islands",
+        "-2147483387": "Kluane",
+        "-2147483385": "Kootenay",
+        "-2147483323": "Mount Revelstoke",
+        "-2147483316": "Pacific Rim",
+        "-2147483244": "Rocky Mountain House",
+        "-2147483198": "Waterton Lakes",
+        "-2147483188": "Wood Buffalo",
+        "-2147483186": "Yoho",
+        "-2147483113": "Chilkoot Trail"
+    },
+    "location" : "all",
+    "interval" : 120,
+    "days" : 60,
+    "equipment" : -32759,
+    "token" : ""
+}

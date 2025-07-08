@@ -13,11 +13,9 @@ def get_messages():
     sorted_data = sorted(data, key=lambda x: (x["resource"], x["site"]))
     return jsonify(sorted_data)
 
-
 @app.route("/api/cart", methods=["GET"])
 def get_cart():
     return jsonify(scraper.store.get("cart"))
-
 
 @app.route("/api/cart", methods=["PUT"])
 def put_cart():
@@ -39,10 +37,10 @@ def delete_cart(cart_id):
 def get_settings():
     response = {
         "username": "com.dennis.parkiesoft",
-        "location": getattr(scraper, "current_location", "None"),
-        "equipment": getattr(scraper, "equipment", "Trailer or Motorhome over 35pt"),
-        "interval": getattr(scraper, "running_interval", 20),
-        "date_range": getattr(scraper, "date_range", 60),
+        "location": scraper.store.get('location'),
+        "equipment": scraper.store.get('equipment'),
+        "interval": scraper.store.get('interval'),
+        "date_range": scraper.store.get('days'),
         "hostname": "localhost",
     }
 
@@ -67,7 +65,6 @@ def save_settings():
         return jsonify({"code": 200, "msg": "Saved Success!"})
     except:  # noqa: E722
         return jsonify({"code": "400", "msg": "Data Format Error!"}), 400
-
 
 @app.route("/api/token", methods=["PUT"])
 def set_token():
