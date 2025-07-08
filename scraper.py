@@ -87,7 +87,7 @@ class Scraper:
         self.today = date.today()
         location = self.store.get('location')
 
-        if location == 'all':
+        if location == '-2147483574':
             self.parks = self.store.get('parks')
         else :
             self.parks = {
@@ -279,7 +279,7 @@ class Scraper:
         return result
     
     def send_push(self, title, body):
-        fcm_token = self.fcm_token
+        fcm_token = self.store.get('token')
         if not fcm_token:
             print("No FCM token provided!")
             return
@@ -305,7 +305,7 @@ class Scraper:
         c_time = now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{int(now.microsecond / 1000):03d}"
         startDate = self._date_str_(start)
         endDate = self._date_str_(end)
-        url = f'{self.store.get('url')}/create-booking/results?mapId={mapId}&searchTabGroupId=0&bookingCategoryId=0&startDate={startDate}&endDate={endDate}&nights={end - start}&isReserving=true&equipmentId={self.store.get('equipment')}&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime={c_time}&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B"-32756":"%5B%5B1%5D,0,0,0%5D"%7D'
+        url = f'{self.store.get('url')}/create-booking/results?mapId={mapId}&searchTabGroupId=0&bookingCategoryId=0&startDate={startDate}&endDate={endDate}&nights={end - start}&isReserving=true&equipmentId=-32768&subEquipmentId={self.store.get('equipment')}&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime={c_time}&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B"-32756":"%5B%5B1%5D,0,0,0%5D"%7D'
         if resourceLocationId:
             url += f"&resourceLocationId={resourceLocationId}"
         return url
@@ -333,54 +333,58 @@ class Scraper:
             "\n------------------------------\n",
         )
 
-        search_results = dict()
 
         fetched = self.api_check(start, end)
         response = fetched.get('mapLinkAvailabilities')
         
-        for map_id in self.parks.keys():
-            if response.get(map_id)[0] == 0:
-                search_results[map_id] = self.find_sites(start, end, map_id)
+        search_results = {
+            "search_time" : f"{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}Z",
+            "start_date": startDate,
+            "end_date": endDate,
+            "data" : []
+        }
 
-        _debug_print(
-            f"Time: {time.time() - _start_time:.2f} seconds, API Calls : {self.api_calls}"
-        )
+        for map_id, park in self.parks.items():
+            if response.get(map_id)[0] > 0: continue
+            
+            found_sites = self.find_sites(start, end, map_id)
 
-        for key in search_results.keys():
-            found_sites = search_results[key]
-            for i in range(len(found_sites)):
-                map_id, location_id, resource_id   =  found_sites[i]
+            for map_id, location_id, resource_id in found_sites:
 
                 location = self.store.find_location(location_id)
                 resource = self.store.find_resource(resource_id)
 
-                if location is None:
+                if location is None or resource is None:
                     continue
 
-                found_sites[i] = {
+                search_results["data"].append({
                     "id": resource_id,
+                    "park" : park,
                     "resource": location["full_name"],
                     "description": location["description"],
-                    "drivingDirection": location["driving_directions"],
+                    "driving_direction": location["driving_directions"],
                     "website": location["website"],
                     "site": resource["name"],
                     "booking_url" : self.make_booking_url(map_id, start, end, location_id),
                     "capacity": resource["capacity"],
-                    "startDate": startDate,
-                    "endDate": endDate,
+                    "start_date" : startDate,
+                    "end_date" : endDate,
                     "added_to_cart" : False
-                }
-            search_results[key] = [ self.parks[key], found_sites ]
+                })
+
+        _debug_print(
+            f"Time: {time.time() - _start_time:.2f} seconds, API Calls : {self.api_calls}"
+        )
+        self.store.flush("searchResult", search_results)
 
         self.send_push(
-            f"PARK Notification ({datetime.now()})",
+            f"PARK Notification ({search_results['search_time']})",
             f"""
                 Available Dates : {startDate} - {endDate}
-                Available Parks : {len(search_results.keys())}
+                Available Parks : {len(search_results['data'])}
             """,
         )
 
-        self.store.flush("searchResult", search_results)
         self._del_session_()
 
     def start(self):
@@ -400,54 +404,56 @@ class Scraper:
                 self.process = None
 
     def set_fcm_token(self, token):
-        with self.lock:
-            if token:
-                self.store.update({
-                    "token" : token
-                })
-                self.stop()
-                self.start()
+        print(f"Token received :{token}")
+        if token and token != self.store.get('token'):
+            self.store.update({
+                "token" : token
+            })
 
-    def setting(self, location: str, equipement: str, days: int, interval: int):
+    def update_setting(self, location: str, equipement: str, days: int, interval: int):
         self.store.update({
             "location" : location,
             "equipment" : equipement,
             "interval" : int(interval),
             "days" :   int(days)
         })
-        self.stop()
-        self.start()
 
     def put_cart(self, new_cart):
-        all_carts = self.store.load("cart")
-        results = self.store.load("searchResult")
+        try:
+            all_carts = self.store.load("cart")
+            results = self.store.load("searchResult")
 
-        new_carts = [cart for cart in all_carts if cart["id"] != new_cart["id"]]
-        new_carts.append(new_cart)
+            new_carts = [cart for cart in all_carts if cart["id"] != new_cart["id"]]
+            new_carts.append(new_cart)
 
-        for i in range(len(results)):
-            if results[i]['id'] == new_cart['id']:
-                results[i]['added_to_cart'] = True
-                break
+            for i in range(len(results['data'])):
+                if results['data'][i]['id'] == new_cart['id']:
+                    results['data'][i]['added_to_cart'] = True
+                    break
 
-        self.store.flush("searchResult", results)
-        self.store.flush("cart", new_carts)
+            self.store.flush("searchResult", results)
+            self.store.flush("cart", new_carts)
+        except Exception as e:
+            _debug_print(f"Put Cart Error - {e}")
 
     def delete_cart(self, cart_id):
-        all_carts = self.store.load('cart')
-        search_results = self.store.load('searchResult')
-        
-        if cart_id == 'all':
-            new_carts = []
-        else :
-            new_carts = [cart for cart in all_carts if cart["id"] != cart_id]
+        try:
+            all_carts = self.store.load('cart')
+            search_results = self.store.load('searchResult')
+            
+            if cart_id == 'all':
+                new_carts = []
+            else :
+                new_carts = [cart for cart in all_carts if cart["id"] != cart_id]
 
-        for i in range(len(search_results)):
-            if search_results[i]['id'] == cart_id:
-                search_results[i].update({'added_to_cart' : False})
-        
-        self.store.flush('searchResult', search_results)
-        self.store.flush('cart', new_carts)
+            for i in range(len(search_results['data'])):
+                if search_results['data'][i]['id'] == cart_id:
+                    search_results['data'][i].update({'added_to_cart' : False})
+            
+            self.store.flush('searchResult', search_results)
+            self.store.flush('cart', new_carts)
+        except Exception as e:
+            _debug_print(f"Delete Cart Error - {e}")
 
 if __name__ == "__main__":
     scraper = Scraper()

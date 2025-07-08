@@ -2,4 +2,5 @@
 .env
 *.env
 *.test
+store.db
 serviceAccountKey.json

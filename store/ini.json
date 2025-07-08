@@ -1,8 +1,8 @@
 {
     "url": "https://reservation.pc.gc.ca",
-    "rootMapId" : "-2147483575",
-    "westernMapId" : "-2147483574",
-    "parks" : {
+    "rootMapId": "-2147483575",
+    "westernMapId": "-2147483574",
+    "parks": {
         "-2147483647": "Banff - Lake Louise",
         "-2147483630": "Banff",
         "-2147483589": "Banff, Kootenay and Yoho Backcountry",
@@ -21,9 +21,21 @@
         "-2147483186": "Yoho",
         "-2147483113": "Chilkoot Trail"
     },
-    "location" : "all",
-    "interval" : 120,
-    "days" : 60,
-    "equipment" : -32759,
-    "token" : ""
+    "equipments": {
+        "-32768": "Small Tent",
+        "-32767": "Medium Tent",
+        "-32766": "Large Tent",
+        "-32765": "Van/Pickup",
+        "-32764": "Tent Trailer",
+        "-32763": "Trailer or Motorhome up to 21ft",
+        "-32762": "Trailer or Motorhome up to 24ft",
+        "-32761": "Trailer or Motorhome up to 27ft",
+        "-32760": "Trailer or Motorhome up to 35ft",
+        "-32759": "Trailer or Motorhome over 35ft"
+    },
+    "location": "-2147483574",
+    "equipment": "-32759",
+    "interval": 120,
+    "days": 60,
+    "token": "123456456"
 }

@@ -202,26 +202,8 @@ class Store(DB):
 
 
 if __name__ == '__main__':
-    db = DB('store.db')
-
-    db.create_table(
-        """
-        CREATE TABLE IF NOT EXISTS equipment (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            ord INTEGER,
-            is_active INTEGER
-        )
-        """
-    )
-
-    with open('store/equipment.json', 'r', encoding='utf-8') as fp:
-        json_data = json.load(fp)
-
-    for y in json_data[0]['subEquipmentCategories']:
-        db.insert('equipment', {
-            "id" : y['subEquipmentCategoryId'],
-            'name' : y['localizedValues'][0]['name'],
-            'ord' : y['order'],
-            'is_active' : y['isActive']
-        })
+    
+    store = Store()
+    store.update({
+        "token" : "sldkjfs;df"
+    })
