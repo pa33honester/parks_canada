@@ -1,7 +1,7 @@
-/.venv
+*.venv
 .env
 *.env
 *.test
-/__pycache__
+*.__pycache__
 store.db
 serviceAccountKey.json
