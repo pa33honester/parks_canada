@@ -2,5 +2,6 @@
 .env
 *.env
 *.test
+/__pycache__
 store.db
 serviceAccountKey.json

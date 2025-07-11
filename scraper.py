@@ -200,7 +200,8 @@ class Scraper:
         
         try:
             mapLinkAvailabilities = response.get('mapLinkAvailabilities')
-            for map_id in self.parks.keys():
+
+            for map_id in self.parks:
                 if mapLinkAvailabilities.get(map_id)[0] == 0:
                     return True
             return False
@@ -337,7 +338,7 @@ class Scraper:
             "data" : []
         }
 
-        for map_id, park in self.parks.items():
+        for map_id in self.parks:
             if response.get(map_id)[0] > 0: continue
             
             found_sites = self.find_sites(start, end, map_id)
@@ -352,7 +353,6 @@ class Scraper:
 
                 search_results["data"].append({
                     "id": resource_id,
-                    "park" : park,
                     "resource": location["full_name"],
                     "description": location["description"],
                     "driving_direction": location["driving_directions"],
