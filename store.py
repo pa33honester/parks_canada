@@ -203,7 +203,22 @@ class Store(DB):
 
 if __name__ == '__main__':
     
-    store = Store()
-    store.update({
-        "token" : "sldkjfs;df"
-    })
+    db = DB('store.db')
+    with open('.test/resourceCategory.json','r', encoding = 'utf-8') as fp:
+        data = json.load(fp)
+    
+    db.create_table('''CREATE TABLE IF NOT EXISTS resourceCategory (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,   
+        name TEXT NOT NULL,
+        description TEXT,
+        icon TEXT,
+        resource_type INTEGER NOT NULL
+    )''')
+
+    for item in data:
+        db.insert('resourceCategory', {
+            "id"    : item.get('id'),
+            "name"  : item.get('localizedValues')[0]['name'],
+            "description": item.get('localizedValues')[0].get('description', ''),
+            "resource_type": item.get('resourceType', 0),
+        })

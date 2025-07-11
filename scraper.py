@@ -85,14 +85,7 @@ class Scraper:
 
         self.api_calls = 0
         self.today = date.today()
-        location = self.store.get('location')
-
-        if location == '-2147483574':
-            self.parks = self.store.get('parks')
-        else :
-            self.parks = {
-                location: self.store.get('parks')[location]
-            }
+        self.parks = self.store.get('location')
 
     def _del_session_(self):
         # self.driver.quit()

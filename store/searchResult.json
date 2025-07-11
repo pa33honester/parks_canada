@@ -1,5 +1,5 @@
 {
-    "search_time": "2025-07-08T16:44:25.435Z",
+    "search_time": "2025-07-08T18:48:32.259Z",
     "start_date": "2025-08-23",
     "end_date": "2025-09-05",
     "data": [
@@ -11,7 +11,7 @@
             "driving_direction": "By drive-on ferry: BC Ferries provides vehicle and passenger service to and from Vancouver, Vancouver Island, Mayne, Saturna and the Pender islands. Once you arrive at the ferry terminal, you can only access park lands by driving or cycling. By walk-on ferry: Sidney Spit is accessible during the summer months by a passenger ferry departing from the Town of Sidney.",
             "website": "https://parks.canada.ca/pn-np/bc/gulf/visit",
             "site": "30",
-            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-23&endDate=2025-09-05&nights=13&isReserving=true&equipmentId=-32759&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-08T11:44:28.541&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-23&endDate=2025-09-05&nights=13&isReserving=true&equipmentId=-32759&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-08T13:48:42.281&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
             "capacity": 6,
             "start_date": "2025-08-23",
             "end_date": "2025-09-05",
