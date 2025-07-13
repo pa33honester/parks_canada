@@ -65,6 +65,17 @@ class DB:
         finally:
             conn.close()
 
+    def count(self, table: str, record_id):
+        conn = self._connect()
+
+        if conn is None:
+            return None
+
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE id = ?", (record_id,))
+        count = cursor.fetchone()[0]  # Get the count from the result
+        return count > 0  # Return True if count is greater than 0
+
     def fetch_one(self, table: str, where: str = '', params: Tuple = ()) -> Optional[Dict]:
         """Fetch single row matching where clause as a dict."""
         query = f'SELECT * FROM {table}'
@@ -88,24 +99,29 @@ class DB:
         finally:
             conn.close()
 
-    def fetch_all(self, table: str, where: str = '', params: Tuple = ()) -> Optional[List[Tuple]]:
-        """Fetch all rows matching where clause."""
+    def fetch_all(self, table: str, where: str = '', params: Tuple = ()) -> Optional[List[Dict]]:
+        """Fetch all rows matching where clause as a list of dicts."""
         query = f'SELECT * FROM {table}'
         if where:
             query += f' WHERE {where}'
         conn = self._connect()
         if conn is None:
             return None
+        
+        # Use row_factory to get dict-like access
+        conn.row_factory = sqlite3.Row
+        
         try:
             cursor = conn.execute(query, params)
-            return cursor.fetchall()
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
         except sqlite3.Error as e:
             print(f"Fetch all error: {e}\nQuery: {query}\nParams: {params}")
             return None
         finally:
             conn.close()
 
-    def update(self, table: str, data: Dict[str, Any], where: str, params: Tuple) -> Optional[int]:
+    def update_row(self, table: str, data: Dict[str, Any], where: str, params: Tuple) -> Optional[int]:
         """Update rows matching where clause. Returns number of rows updated or None on error."""
         set_clause = ', '.join([f"{k}=?" for k in data.keys()])
         values = tuple(data.values()) + params
@@ -189,17 +205,18 @@ class Store(DB):
 
     # return -> resource location id
     def find_location_id(self, map_id):
-        row =  super().fetch_one('location', 'root_map_id = ?', (map_id,))
-        if row is None :
-            return None
-        return row['id']
+        row = super().fetch_one('map', 'map_id = ?', (map_id,))
+        if row is None or row['resource_location_id'] is None:
+            row =  super().fetch_one('location', 'root_map_id = ?', (map_id,))
+            return None if row is None else row['id']
+        else :
+            return row['resource_location_id']
 
     def find_location(self, l_id):
         return super().fetch_one('location', 'id = ?', (l_id,))
     
     def find_resource(self, r_id):
         return super().fetch_one('resource', 'id = ?', (r_id,))
-
 
 if __name__ == '__main__':
     

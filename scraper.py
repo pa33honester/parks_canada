@@ -8,19 +8,30 @@ from dotenv import load_dotenv, set_key
 import threading
 
 from selenium import webdriver
+# from seleniumwire import webdriver  # Note the change
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 import firebase_admin
 from firebase_admin import credentials, messaging
 from store import Store
 
-DEBUG = True
+DEBUG = False
 
 def _debug_print(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
+
+# Function to get localized display name
+def get_localized_display_name(localized_values, culture_name):
+    for value in localized_values:
+        if value['cultureName'] == culture_name:
+            return value['displayName']
+    return None
 
 class Scraper:
     def __init__(self):
@@ -36,7 +47,7 @@ class Scraper:
         cred = credentials.Certificate("serviceAccountKey.json")
         firebase_admin.initialize_app(cred)
 
-    def _date_str_(self, days_from_today: int) -> str:
+    def date2str(self, days_from_today: int) -> str:
         """
         Get the date string in 'YYYY-MM-DD' format for a given number of days from today.
         """
@@ -46,20 +57,20 @@ class Scraper:
     def _init_session_(self):
         # Initialize Selenium Web Driver
         # options = Options()
-        # options.add_argument("--headless")
+        # # options.add_argument("--headless")
         # self.driver = webdriver.Chrome(
         #     service=Service(ChromeDriverManager().install()), options=options
         # )
-        # self.driver.get(self.store.get('url'))
         # self.driver.maximize_window()
+        # self.driver.get(self.store.get('url'))
         # time.sleep(5)
         # self.cart_uid = self.driver.execute_script(
         #     "return localStorage.getItem('cartUid');"
         # )
-        # self.cart_transaction_uid = self.driver.execute_script(
-        #     "return localStorage.getItem('cartTransactionUid');"
-        # )
-        # init request
+
+        self.api_calls = 0
+        self.today = date.today()
+        self.attribute_data = self.store.load('attributes')
         self.session = requests.Session()
         self.headers = {
             "Accept": "application/json",
@@ -82,11 +93,7 @@ class Scraper:
             "Request-Id": f"|{uuid.uuid4()}.{uuid.uuid4().hex[:12]}",
             "Traceparent": f"00-{uuid.uuid4().hex[:32]}-{uuid.uuid4().hex[:16]}-01",
         }
-
-        self.api_calls = 0
-        self.today = date.today()
-        self.parks = self.store.get('location')
-
+ 
     def _del_session_(self):
         # self.driver.quit()
         self.session.close()
@@ -177,8 +184,8 @@ class Scraper:
         if mapId is None:
             mapId = self.store.get("westernMapId")
 
-        startDate = self._date_str_(start)
-        endDate = self._date_str_(end)
+        startDate = self.date2str(start)
+        endDate = self.date2str(end)
 
         response = self._request_(
             methods="GET",
@@ -188,90 +195,198 @@ class Scraper:
 
         return response
 
-    def fast_check(self, start: int, end: int) -> bool:
-        """
-            Fast Check If Given Date Range is Available
-        """
+    def dfs(self, park_id, map_id = None, resourceLocationId = None) -> bool:
 
-        response = self.api_check(start, end)
+        if map_id == "-2147483403" or map_id == -2147483403: # ignore Jasper Overflow
+            return False
+
+        if map_id is None:
+            map_id = park_id
+
+        if resourceLocationId is None:
+            resourceLocationId = self.store.find_location_id(map_id)
+
+        response = self.api_check(0, 1, map_id)
 
         if response is None :
+            print(f"Request Error {map_id}")
             return False
         
         try:
             mapLinkAvailabilities = response.get('mapLinkAvailabilities')
+            resourceAvailabilities = response.get('resourceAvailabilities')
 
-            for map_id in self.parks:
-                if mapLinkAvailabilities.get(map_id)[0] == 0:
-                    return True
-            return False
-        
+            if resourceAvailabilities:
+                resources = self._request_("GET", f"https://reservation.pc.gc.ca/api/resourcelocation/resources?resourceLocationId={resourceLocationId}")
+                print(f"resourceLocationId = {resourceLocationId}")
+
+                for id in resourceAvailabilities.keys():
+                    if resources.get(id) is None:
+                        print(f"Not Found resource {id}")
+                        continue
+                    
+                    row = self.store.fetch_one('resource_map', 'id = ?', (id,))
+                    if row : 
+                        print(f"Resource Already exist {id} - {row['park_id']} <> {park_id}")
+                        continue
+
+                    value = resources.get(id)
+                    category = self.store.fetch_one('category', 'id = ?', (value['resourceCategoryId'],))['name']
+                    self.store.insert('resource_map', {
+                        "id"   : int(id),
+                        'park_id' : park_id,
+                        'map_id' : map_id,
+                        'location_id' : resourceLocationId,
+                        "name" : value['localizedValues'][0]['name'],
+                        'description' : value['localizedValues'][0]['description'],
+                        'category' : category,
+                        'capacity' : value['maxCapacity'],
+                        'photos' : json.dumps(value['photos']),
+                        'max_stay' : value['maxStay']
+                    })
+            else :
+                for child_map_id in mapLinkAvailabilities.keys():
+                        self.dfs(park_id, child_map_id, resourceLocationId)
+
         except Exception as e:
-            _debug_print(f"Error in Fast-Check {e}")
-            return False
-        
-    def find_date_range(self, min_block=5):
-        
-        total_days = self.store.get('days')
-        found = 0, 0
-        day = 0
+            _debug_print(f"Fast-Check-Error {e}")
 
-        def expand_window(start):
-            low = min_block
-            high = total_days - start
-            best_end = start + min_block - 1
-            # Binary search for maximum available window
-            while low <= high:
-                mid = (low + high) // 2
-                if self.fast_check(start, start + mid - 1):
-                    best_end = start + mid - 1
-                    low = mid + 1
-                else:
-                    high = mid - 1
-            return best_end
+    def update_attributes(self):
+        self._init_session_()
 
-        while day <= total_days - min_block:
-            # First check if a large block is available
-            if self.fast_check(day, day + min_block - 1):
-                end = expand_window(day)
-                if end - day > found[1] - found[0]:
-                    found = (day, end)
-                day = end + 1  # Jump past this block
+        # resource_location_list = self.store.fetch_all('location')
+        resource_location_list = [{"id" : -2147483590}, {"id" : -2147483531}]
+
+        total_changed = 0
+        for resource_location in resource_location_list:
+            resourceLocationId = resource_location['id']
+
+            print(f"Resource Location #{resourceLocationId} is processing...")
+
+            resource_list = self._request_("GET", f"https://reservation.pc.gc.ca/api/resourcelocation/resources?resourceLocationId={resourceLocationId}")
+
+            if not resource_list:
+                print(f"Resource Location #{resourceLocationId} could not resolve...")
+                continue
+
+            # Example: Mapping attributes
+            for resource_id, resource_data in resource_list.items():
+
+                # List to store attribute names and values
+                attributes_list = []
+
+                # Culture to display names (change as needed)
+                culture_name = "en-CA"
+
+                # Iterate over defined attributes to extract names and values
+                for attr in resource_data['definedAttributes']:
+                    attribute_definition_id = attr['attributeDefinitionId']
+                    
+                    
+                    # Find corresponding attribute in attribute_json
+                    if str(attribute_definition_id) not in self.attribute_data:
+                        continue
+
+                    attribute_details = self.attribute_data[str(attribute_definition_id)]
+                    
+                    # Get the display name for the attribute
+                    attribute_name = get_localized_display_name(attribute_details['localizedValues'], culture_name)
+                    
+                    if attribute_details.get('values'):
+                        # Get the values for the attribute
+                        values = []
+                        attribute_defined_values = attr.get('values', [])
+                        for i in attribute_defined_values:
+                            value = None
+                            for t in attribute_details['values']:
+                                if str(t['enumValue']) == str(i):
+                                    value = t
+                                    break
+                            if value is None:
+                                continue
+
+                            value_name = get_localized_display_name(value['localizedValues'], culture_name)
+                            values.append(value_name)
+                        
+                        # Append to the attributes list
+                        attributes_list.append({
+                            "attribute": attribute_name,
+                            "value": ', '.join(values)
+                        })
+                    else :
+                        attributes_list.append({
+                            "attribute": attribute_name,
+                            "value": f"[Min : {attribute_details['minValue']} - Max : {attribute_details['maxValue']}]"
+                        })
+                
+                updated = self.store.update_row('resource_map', {"attr" : json.dumps(attributes_list).encode('utf-8')}, 'id = ?', (resource_id,))
+                if updated :
+                    total_changed += 1
+        print(f"Total Changed : {total_changed}")
+
+        self._del_session_()
+
+    def find_availability(self, start, end, resourceId):
+       
+        url = f"{self.store.get('url')}/api/availability/resourcedailyavailability"
+        params = {
+            # "cartUid": self.cart_uid,
+            "resourceId" : resourceId,
+            "bookingCategoryId" : 0,
+            "startDate" : self.date2str(start),
+            "endDate"   : self.date2str(end),
+            "isReserving" :  True,
+            "equipmentCategoryId" : -32768, 
+            "subEquipmentCategoryId" :  -32759,
+            "boatLength" : 0,
+            "boatDraft" : 0,
+            "boatWidth" : 0,
+            "peopleCapacityCategoryCounts" : json.dumps([{
+                "capacityCategoryId":-32767,
+                "subCapacityCategoryId":None,
+                "count":1
+            }]),
+            "numEquipment" : 0,
+            "filterData" : json.dumps([{
+                "attributeDefinitionId":-32756,
+                "attributeDefinitionDecimalValue":0,
+                "enumValues" : [1],
+                "filterStrategy" : 0,
+                "attributeType" : 0
+            }]),
+            "groupHoldUid" : None
+        }
+
+        try:
+            response = self._request_("GET", url, params=params)
+            with open("test.json", "w") as f:
+                json.dump(response, f, indent=4)
+        except :
+            print(f"Resource #{resourceId} could not resolve...")
+            return None
+
+        if response is None:
+            return None
+
+        max_range = 123456
+        days = len(response)
+        found_start, found_end = max_range, -1
+
+        for i in range(days):
+            available = response[i].get('availability')
+            if available == 0:
+                print(f"Found available date : {resourceId} - {self.date2str(i)}")
+                found_start = min(found_start, i)
+                found_end = i
             else:
-                day += 1  # Slide forward
+                if found_end - found_start > 5:
+                    return found_start, found_end
+                found_start = max_range
+        if found_end - found_start > 5:
+            return found_start, found_end
+        else:
+            return None
 
-        # debug print the found ranges
-        return found
-
-    def find_sites(self, start, end, mapId, resourceLocationId = None):
-        if resourceLocationId is None:
-            resourceLocationId = self.store.find_location_id(mapId)
-
-        response = self.api_check(start, end, mapId)
-
-        if (
-            response is None
-            or response.get("mapAvailabilities") is None
-            or response.get("mapAvailabilities")[0] != 0
-        ):
-            _debug_print( "Request failed...")
-            return []
-
-        mapLinkAvailabilities = response.get("mapLinkAvailabilities")
-        resourceAvailabilities = response.get("resourceAvailabilities", {})
-
-        result = []
-        if mapLinkAvailabilities:
-            for childMapId, availible in mapLinkAvailabilities.items():
-                if availible[0] == 0:
-                    result = result + self.find_sites(start, end, childMapId, resourceLocationId)
-        elif resourceLocationId:
-            for resourceId, available in resourceAvailabilities.items():
-                if available[0].get("availability") == 0:
-                    result.append( (mapId, resourceLocationId, resourceId) )
-    
-        return result
-    
     def send_push(self, title, body):
         fcm_token = self.store.get('token')
         if not fcm_token:
@@ -297,8 +412,8 @@ class Scraper:
     def make_booking_url(self, mapId, start, end, resourceLocationId = None):
         now = datetime.now()
         c_time = now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{int(now.microsecond / 1000):03d}"
-        startDate = self._date_str_(start)
-        endDate = self._date_str_(end)
+        startDate = self.date2str(start)
+        endDate = self.date2str(end)
         url = f'{self.store.get('url')}/create-booking/results?mapId={mapId}&searchTabGroupId=0&bookingCategoryId=0&startDate={startDate}&endDate={endDate}&nights={end - start}&isReserving=true&equipmentId=-32768&subEquipmentId={self.store.get('equipment')}&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime={c_time}&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B"-32756":"%5B%5B1%5D,0,0,0%5D"%7D'
         if resourceLocationId:
             url += f"&resourceLocationId={resourceLocationId}"
@@ -314,71 +429,68 @@ class Scraper:
         _start_time = time.time()
 
         # create session
+        now = datetime.now()
+        current_time = now.strftime("%Y-%m-%d %H:%M:%S")
         self._init_session_()
 
-        # find available date range
-        start, end = self.find_date_range()
-
-        startDate = self._date_str_(start)
-        endDate = self._date_str_(end)
-
         _debug_print(
-            f"Handling range: {startDate} to {endDate}",
+            f"Starting session :  {current_time}",
             "\n------------------------------\n",
         )
 
-
-        fetched = self.api_check(start, end)
-        response = fetched.get('mapLinkAvailabilities')
-        
+        days = self.store.get('days')
+        parks = self.store.get('location')
         search_results = {
-            "search_time" : f"{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}Z",
-            "start_date": startDate,
-            "end_date": endDate,
+            "time" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "data" : []
         }
+        push_results = 0
 
-        for map_id in self.parks:
-            if response.get(map_id)[0] > 0: continue
-            
-            found_sites = self.find_sites(start, end, map_id)
+        for park_id in parks:
+            resources = self.store.fetch_all('resource_map', 'park_id = ?', (park_id,))
 
-            for map_id, location_id, resource_id in found_sites:
+            print(f"{len(resources)} resource found.")
 
-                location = self.store.find_location(location_id)
-                resource = self.store.find_resource(resource_id)
-
-                if location is None or resource is None:
-                    continue
-
-                search_results["data"].append({
-                    "id": resource_id,
-                    "resource": location["full_name"],
-                    "description": location["description"],
-                    "driving_direction": location["driving_directions"],
-                    "website": location["website"],
-                    "site": resource["name"],
-                    "booking_url" : self.make_booking_url(map_id, start, end, location_id),
-                    "capacity": resource["capacity"],
-                    "start_date" : startDate,
-                    "end_date" : endDate,
-                    "added_to_cart" : False
-                })
+            cnt = 0
+            for resource in resources:
+                cnt += 1
+                print(f"#{cnt} Resource #{resource['id']} processing...")
+                found_range = self.find_availability(0, days, resource['id'])
+                if found_range:
+                    
+                    push_results += 1
+                    
+                    booking_url = self.make_booking_url(resource['map_id'], found_range[0], found_range[1], resource['location_id'])
+                    location = self.store.find_location(resource['location_id'])
+                    
+                    search_results["data"].append({
+                        "id"   : resource['id'],
+                        "site" : resource['name'],
+                        "full_name" : location['full_name'],
+                        "attributes" : json.loads(resource['attr'].decode('utf-8')),
+                        "category" : resource['category'],
+                        "description" : resource['description'],
+                        "start_date" : self.date2str(found_range[0]),
+                        "end_date" : self.date2str(found_range[1]),
+                        "capacity" : resource['capacity'],
+                        "booking_url" : booking_url,
+                        "added_to_cart" : False
+                    })
 
         _debug_print(
-            f"Time: {time.time() - _start_time:.2f} seconds, API Calls : {self.api_calls}"
-        )
-        self.store.flush("searchResult", search_results)
-
-        self.send_push(
-            f"PARK Notification ({search_results['search_time']})",
-            f"""
-                Available Dates : {startDate} - {endDate}
-                Available Parks : {len(search_results['data'])}
-            """,
+            f"Running Time: {time.time() - _start_time:.2f} seconds, API Calls : {self.api_calls}"
         )
 
         self._del_session_()
+
+        self.store.flush("searchResult", search_results)
+        
+        # self.send_push(
+        #     f"PARKS CANADA ALERT ({current_time})",
+        #     f"""
+        #         Available Sites Found : {push_results}
+        #     """,
+        # )
 
     def start(self):
         with self.lock:
@@ -386,7 +498,7 @@ class Scraper:
                 self.process.cancel()
             self.is_running = True
             self.run()
-            self.process = threading.Timer(self.store.get('interval') * 60, self.start)
+            self.process = threading.Timer(self.store.get('interval') * 2, self.start)
             self.process.start()
 
     def stop(self):
@@ -449,6 +561,9 @@ class Scraper:
             _debug_print(f"Delete Cart Error - {e}")
 
 if __name__ == "__main__":
+
     scraper = Scraper()
+
     scraper.run()
-    input('Press Enter to Exit...')
+
+    input('Press Enter...')

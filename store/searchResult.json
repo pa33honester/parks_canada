@@ -1,20 +1,762 @@
 {
-    "search_time": "2025-07-08T18:48:32.259Z",
-    "start_date": "2025-08-23",
-    "end_date": "2025-09-05",
+    "time": "2025-07-13 12:42:02",
     "data": [
         {
-            "id": "-2147476574",
-            "park": "Gulf Islands",
-            "resource": "Gulf Islands - SMONE\u0106TEN",
-            "description": "A haven for wildlife, eagles and seabirds soar above the Salish Sea and British Columbia\u2019s southern Gulf Islands off the eastern coast of Vancouver Island. Sheltered, islet-dotted waters teem with seals, otters, orcas and porpoises. Explore the rare eco-systems and unique Mediterranean-like climate.",
-            "driving_direction": "By drive-on ferry: BC Ferries provides vehicle and passenger service to and from Vancouver, Vancouver Island, Mayne, Saturna and the Pender islands. Once you arrive at the ferry terminal, you can only access park lands by driving or cycling. By walk-on ferry: Sidney Spit is accessible during the summer months by a passenger ferry departing from the Town of Sidney.",
-            "website": "https://parks.canada.ca/pn-np/bc/gulf/visit",
-            "site": "30",
-            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-23&endDate=2025-09-05&nights=13&isReserving=true&equipmentId=-32759&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-08T13:48:42.281&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "id": -2147476599,
+            "site": "25",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Good"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "PM Sun"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "Exposed to traffic noise from highway",
+            "start_date": "2025-09-03",
+            "end_date": "2025-09-11",
             "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-09-03&endDate=2025-09-11&nights=8&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:07.250&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476597,
+            "site": "19",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "AM Sun"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Poor"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "",
+            "start_date": "2025-08-30",
+            "end_date": "2025-09-11",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-30&endDate=2025-09-11&nights=12&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:10.257&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476592,
+            "site": "38",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Good"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "Fully"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Conditions",
+                    "value": "Close to Highway / Major Road / Train"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 200 m / 656 ft"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "Exposition au bruit de la circulation routi\u00e8re.",
+            "start_date": "2025-09-01",
+            "end_date": "2025-09-11",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-09-01&endDate=2025-09-11&nights=10&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:17.746&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476585,
+            "site": "14",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "Fully"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Poor"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "",
+            "start_date": "2025-08-31",
+            "end_date": "2025-09-09",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-31&endDate=2025-09-09&nights=9&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:28.069&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476574,
+            "site": "30",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Soft Bed"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Conditions",
+                    "value": "Close to Highway / Major Road / Train, Shared Double Site"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Forest Floor"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Moderate"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "PM Sun"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "Peut \u00eatre combin\u00e9 avec l'emplacement 31 pour former un emplacement double convenant aux familles. Expos\u00e9 au bruit de circulation routi\u00e8re.",
             "start_date": "2025-08-23",
-            "end_date": "2025-09-05",
+            "end_date": "2025-09-11",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-23&endDate=2025-09-11&nights=19&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:45.455&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476570,
+            "site": "26",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Good"
+                },
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Adjacent To",
+                    "value": "Washroom"
+                },
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Moderate"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "Fully"
+                },
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "Exposed to traffic noise from highway",
+            "start_date": "2025-08-20",
+            "end_date": "2025-08-27",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-20&endDate=2025-08-27&nights=7&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:51.348&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
+            "added_to_cart": false
+        },
+        {
+            "id": -2147476567,
+            "site": "34",
+            "full_name": "Gulf Islands - SMONE\u0106TEN",
+            "attributes": [
+                {
+                    "attribute": "Service Type",
+                    "value": "Unserviced with on-site Fire Pit"
+                },
+                {
+                    "attribute": "Sub-Category",
+                    "value": "Nightly"
+                },
+                {
+                    "attribute": "Distance to Washroom Facilities",
+                    "value": "Within 200 m / 656 ft"
+                },
+                {
+                    "attribute": "Generator Usage",
+                    "value": "Not Allowed During Quiet Hours"
+                },
+                {
+                    "attribute": "Firepit On Site",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Cellular Coverage",
+                    "value": "Yes"
+                },
+                {
+                    "attribute": "Wi-fi",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Ground Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Picnic Tables",
+                    "value": "1"
+                },
+                {
+                    "attribute": "Conditions",
+                    "value": "Close to Highway / Major Road / Train"
+                },
+                {
+                    "attribute": "Campsite Slope",
+                    "value": "Flat"
+                },
+                {
+                    "attribute": "Maneuverability",
+                    "value": "Tight Turning Radius"
+                },
+                {
+                    "attribute": "Service Level",
+                    "value": "Unserviced"
+                },
+                {
+                    "attribute": "Site Shade",
+                    "value": "Fully"
+                },
+                {
+                    "attribute": "Main Pad Cover",
+                    "value": "Gravel"
+                },
+                {
+                    "attribute": "Distance to Water Tap",
+                    "value": "Within 100 m / 328 ft"
+                },
+                {
+                    "attribute": "Off-Site Vehicle Parking",
+                    "value": "None"
+                },
+                {
+                    "attribute": "Privacy",
+                    "value": "Fair"
+                },
+                {
+                    "attribute": "Electrical Service",
+                    "value": "Non-Electric"
+                },
+                {
+                    "attribute": "Accessible",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Sewer Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Water Service",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Pull-through",
+                    "value": "No"
+                },
+                {
+                    "attribute": "Walk-in Only",
+                    "value": "No"
+                }
+            ],
+            "category": "Campsite",
+            "description": "Exposed to traffic noise from highway",
+            "start_date": "2025-08-27",
+            "end_date": "2025-09-11",
+            "capacity": 6,
+            "booking_url": "https://reservation.pc.gc.ca/create-booking/results?mapId=-2147483477&searchTabGroupId=0&bookingCategoryId=0&startDate=2025-08-27&endDate=2025-09-11&nights=15&isReserving=true&equipmentId=-32768&subEquipmentId=-32759&peopleCapacityCategoryCounts=%5B%5B-32767,null,1,null%5D%5D&searchTime=2025-07-13T12:44:55.972&flexibleSearch=%5Bfalse,false,null,1%5D&filterData=%7B\"-32756\":\"%5B%5B1%5D,0,0,0%5D\"%7D&resourceLocationId=-2147483601",
             "added_to_cart": false
         }
     ]

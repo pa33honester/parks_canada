@@ -11,6 +11,7 @@
         "-2147483534": "Fort Rodd Hill",
         "-2147483497": "Glacier",
         "-2147483478": "Gulf Islands",
+        "-2147483463": "Jasper",
         "-2147483387": "Kluane",
         "-2147483385": "Kootenay",
         "-2147483323": "Mount Revelstoke",
@@ -33,7 +34,7 @@
         "-32760": "Trailer or Motorhome up to 35ft",
         "-32759": "Trailer or Motorhome over 35ft"
     },
-    "location": ["-2147483630"],
+    "location": ["-2147483478"],
     "equipment": "-32759",
     "interval": 120,
     "days": 60,
