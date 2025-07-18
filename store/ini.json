@@ -36,8 +36,8 @@
     },
     "location": ["-2147483559"],
     "equipment": "-32759",
-    "interval": 120,
+    "interval": 30,
     "days": 60,
-    "blocks" : 1,
+    "nights" : 5,
     "token": ""
 }

@@ -60,7 +60,8 @@ def save_settings():
         equipment = data.get("equipment")
         days = data.get("date_range")
         interval = data.get("interval")
-        scraper.update_setting(location, equipment, days, interval)
+        blocks = data.get("nights")
+        scraper.update_setting(location, equipment, days, interval, blocks)
         return jsonify({"code": 200, "msg": "Saved Success!"})
     except:  # noqa: E722
         return jsonify({"code": "400", "msg": "Data Format Error!"}), 400

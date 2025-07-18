@@ -380,7 +380,7 @@ class Scraper:
         if not response:
             return None
 
-        found_start, found_end = DEFAULT_MAX_RANGE, -1
+        found_start, found_end = DEFAULT_MAX_RANGE, 0
         min_required_range = min(MIN_BLOCKS, 6)  # Use consistent minimum range
 
         for i, day_data in enumerate(response):
@@ -390,15 +390,15 @@ class Scraper:
             available = day_data.get('availability', -1)  # Default to unavailable
             if available == 0:
                 found_start = min(found_start, i)
-                found_end = max(found_end, i)
+                found_end = max(found_end, i + 1)
             else:
-                if found_end - found_start + 1 >= min_required_range:
-                    return found_start, found_end + 1
-                found_start, found_end = DEFAULT_MAX_RANGE, -1
+                if found_end - found_start >= min_required_range:
+                    return found_start, found_end
+                found_start, found_end = DEFAULT_MAX_RANGE, 0
 
         # Final check
-        if found_end - found_start + 1 >= min_required_range:
-            return found_start, found_end + 1
+        if found_end - found_start >= min_required_range:
+            return found_start, found_end
         return None
 
     def send_push(self, title, body):
@@ -561,12 +561,13 @@ class Scraper:
                 "token" : token
             })
 
-    def update_setting(self, location: str, equipement: str, days: int, interval: int):
+    def update_setting(self, location, equipement, days, interval, blocks):
         self.store.update({
             "location" : location,
             "equipment" : equipement,
-            "interval" : int(interval),
-            "days" :   int(days)
+            "interval" : interval,
+            "days" :   days,
+            "nights" : blocks
         })
 
     def put_cart(self, new_cart):
