@@ -34,9 +34,10 @@
         "-32760": "Trailer or Motorhome up to 35ft",
         "-32759": "Trailer or Motorhome over 35ft"
     },
-    "location": ["-2147483478"],
+    "location": ["-2147483559"],
     "equipment": "-32759",
     "interval": 120,
     "days": 60,
+    "blocks" : 1,
     "token": ""
 }

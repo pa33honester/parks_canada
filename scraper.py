@@ -20,7 +20,7 @@ import firebase_admin
 from firebase_admin import credentials, messaging
 from store import Store
 
-DEBUG = False
+DEBUG = True
 
 def _debug_print(*args, **kwargs):
     if DEBUG:
@@ -326,8 +326,19 @@ class Scraper:
 
         self._del_session_()
 
-    def find_availability(self, start, end, resourceId):
-       
+    def find_availability(self, start , end , resourceId):
+        """Finds available slots for a resource within a date range.
+        Args:
+            start: Start date of the search range.
+            end: End date of the search range.
+            resourceId: ID of the resource to check.
+            
+        Returns:
+            A tuple of (start_index, end_index) if a suitable slot is found, else None.
+        """
+        # Constants (should be defined at class level)
+        MIN_BLOCKS = self.store.get('blocks')
+        DEFAULT_MAX_RANGE = 123456
         url = f"{self.store.get('url')}/api/availability/resourcedailyavailability"
         params = {
             # "cartUid": self.cart_uid,
@@ -359,33 +370,36 @@ class Scraper:
 
         try:
             response = self._request_("GET", url, params=params)
+            # Debugging output
             with open("test.json", "w") as f:
                 json.dump(response, f, indent=4)
-        except :
-            print(f"Resource #{resourceId} could not resolve...")
+        except Exception as e:  # Replace with specific exception
+            _debug_print(f"Failed to check availability for resource #{resourceId}: {str(e)}")
             return None
 
-        if response is None:
+        if not response:
             return None
 
-        max_range = 123456
-        days = len(response)
-        found_start, found_end = max_range, -1
+        found_start, found_end = DEFAULT_MAX_RANGE, -1
+        min_required_range = min(MIN_BLOCKS, 6)  # Use consistent minimum range
 
-        for i in range(days):
-            available = response[i].get('availability')
+        for i, day_data in enumerate(response):
+            if not isinstance(day_data, dict):
+                continue
+                
+            available = day_data.get('availability', -1)  # Default to unavailable
             if available == 0:
-                print(f"Found available date : {resourceId} - {self.date2str(i)}")
                 found_start = min(found_start, i)
-                found_end = i
+                found_end = max(found_end, i)
             else:
-                if found_end - found_start > 5:
-                    return found_start, found_end
-                found_start = max_range
-        if found_end - found_start > 5:
-            return found_start, found_end
-        else:
-            return None
+                if found_end - found_start + 1 >= min_required_range:
+                    return found_start, found_end + 1
+                found_start, found_end = DEFAULT_MAX_RANGE, -1
+
+        # Final check
+        if found_end - found_start + 1 >= min_required_range:
+            return found_start, found_end + 1
+        return None
 
     def send_push(self, title, body):
         fcm_token = self.store.get('token')
@@ -419,6 +433,35 @@ class Scraper:
             url += f"&resourceLocationId={resourceLocationId}"
         return url
 
+    def search(self, map_id) -> bool:
+
+        if map_id == "-2147483403" or map_id == -2147483403: # ignore Jasper Overflow
+            return False
+
+        days = self.store.get('days')
+
+        response = self.api_check(0, days , map_id)
+
+        if response is None :
+            print(f"Request Error {map_id}")
+            return False
+        
+        try:
+            mapLinkAvailabilities = response.get('mapLinkAvailabilities')
+            resourceAvailabilities = response.get('resourceAvailabilities')
+
+            if resourceAvailabilities:
+                for site_id, available in resourceAvailabilities.items():
+                    if available[0]['availability'] == 7 or available[0]['availability'] == 0:
+                        self.site_list.append(site_id)
+            else :
+                for child_map_id, available in mapLinkAvailabilities.items():
+                    # if available[0] == 0 or available[0] == 7 or available[0] == 3: # available or partly available
+                        self.search(child_map_id)
+
+        except Exception as e:
+            _debug_print(f"Search-Error {e}")
+
     def run(self):
         """
         Run the scraper to find available date ranges.
@@ -440,6 +483,8 @@ class Scraper:
 
         days = self.store.get('days')
         parks = self.store.get('location')
+
+        self.site_list = []
         search_results = {
             "time" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "data" : []
@@ -447,35 +492,36 @@ class Scraper:
         push_results = 0
 
         for park_id in parks:
-            resources = self.store.fetch_all('resource_map', 'park_id = ?', (park_id,))
+            self.search(park_id)
 
-            print(f"{len(resources)} resource found.")
+        _debug_print(f"Found {len(self.site_list)} sites available...", self.site_list)
 
-            cnt = 0
-            for resource in resources:
-                cnt += 1
-                print(f"#{cnt} Resource #{resource['id']} processing...")
-                found_range = self.find_availability(0, days, resource['id'])
-                if found_range:
-                    
-                    push_results += 1
-                    
-                    booking_url = self.make_booking_url(resource['map_id'], found_range[0], found_range[1], resource['location_id'])
-                    location = self.store.find_location(resource['location_id'])
-                    
-                    search_results["data"].append({
-                        "id"   : resource['id'],
-                        "site" : resource['name'],
-                        "full_name" : location['full_name'],
-                        "attributes" : json.loads(resource['attr'].decode('utf-8')),
-                        "category" : resource['category'],
-                        "description" : resource['description'],
-                        "start_date" : self.date2str(found_range[0]),
-                        "end_date" : self.date2str(found_range[1]),
-                        "capacity" : resource['capacity'],
-                        "booking_url" : booking_url,
-                        "added_to_cart" : False
-                    })
+        for resource_id in self.site_list:
+            resource = self.store.fetch_one('resource_map', 'id = ?', (resource_id,))
+
+            if resource is None:
+                _debug_print(f"Resource #{resource_id} not exist in the database..")
+
+            found_range = self.find_availability(0, days, resource['id'])
+            if found_range:
+                push_results += 1
+                booking_url = self.make_booking_url(resource['map_id'], found_range[0], found_range[1], resource['location_id'])
+                location = self.store.find_location(resource['location_id'])
+                
+                search_results["data"].append({
+                    "id"   : resource['id'],
+                    "site" : resource['name'],
+                    "img_url" : json.loads(resource['photos']),
+                    "full_name" : location['full_name'],
+                    "attributes" : json.loads(resource['attr'].decode('utf-8')),
+                    "category" : resource['category'],
+                    "description" : resource['description'],
+                    "start_date" : self.date2str(found_range[0]),
+                    "end_date" : self.date2str(found_range[1]),
+                    "capacity" : resource['capacity'],
+                    "booking_url" : booking_url,
+                    "added_to_cart" : False
+                })
 
         _debug_print(
             f"Running Time: {time.time() - _start_time:.2f} seconds, API Calls : {self.api_calls}"
@@ -485,12 +531,12 @@ class Scraper:
 
         self.store.flush("searchResult", search_results)
         
-        # self.send_push(
-        #     f"PARKS CANADA ALERT ({current_time})",
-        #     f"""
-        #         Available Sites Found : {push_results}
-        #     """,
-        # )
+        self.send_push(
+            f"PARKS CANADA ALERT ({search_results['time']})",
+            f"""
+                Available Sites Found : {push_results}
+            """,
+        )
 
     def start(self):
         with self.lock:
@@ -498,7 +544,7 @@ class Scraper:
                 self.process.cancel()
             self.is_running = True
             self.run()
-            self.process = threading.Timer(self.store.get('interval') * 2, self.start)
+            self.process = threading.Timer(self.store.get('interval') * 60, self.start)
             self.process.start()
 
     def stop(self):

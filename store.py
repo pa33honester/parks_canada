@@ -139,7 +139,7 @@ class DB:
         finally:
             conn.close()
 
-    def delete(self, table: str, where: str, params: Tuple) -> Optional[int]:
+    def delete_row(self, table: str, where: str, params: Tuple) -> Optional[int]:
         """Delete rows matching where clause. Returns number of rows deleted or None on error."""
         query = f'DELETE FROM {table} WHERE {where}'
         conn = self._connect()
